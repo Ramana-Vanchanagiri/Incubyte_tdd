@@ -21,4 +21,8 @@ class TestStringCalculator < Minitest::Test
   def test_multiple_numbers
     assert_equal 10, @calc.add("1,2,3,4")
   end
+
+  def test_newline_delimiters
+    assert_equal 6, @calc.add("1\n2,3")
+  end
 end

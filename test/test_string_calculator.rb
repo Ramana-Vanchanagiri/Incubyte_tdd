@@ -40,4 +40,9 @@ class TestStringCalculator < Minitest::Test
     assert_match "Negative numbers not allowed: -2,-5", error.message
   end
 
+  def test_delimiter_mismatch_raises_generic_error
+    error = assert_raises(RuntimeError) { @calc.add("//;\n1,2") }
+    assert_includes error.message, "Delimiter mismatch: please use only the specified delimiter."
+  end
+
 end

@@ -13,4 +13,8 @@ class TestStringCalculator < Minitest::Test
   def test_single_number
     assert_equal 5, @calc.add("5")
   end
+
+  def test_two_numbers
+    assert_equal 3, @calc.add("1,2")
+  end
 end

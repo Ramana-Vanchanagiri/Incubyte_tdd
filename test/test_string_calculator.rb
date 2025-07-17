@@ -45,4 +45,8 @@ class TestStringCalculator < Minitest::Test
     assert_includes error.message, "Delimiter mismatch: please use only the specified delimiter."
   end
 
+  def test_return_zero_for_blank_input
+    assert_equal 9, @calc.add("1+2,3*2")
+  end
+
 end

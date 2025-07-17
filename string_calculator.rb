@@ -1,3 +1,4 @@
+require 'byebug'
 class StringCalculator
   def add(numbers)
     return 0 if numbers.empty?
@@ -14,7 +15,21 @@ class StringCalculator
 
       num_arr = parts.map(&:to_i)
     else
-      num_arr = numbers.split(/,|\n/).map(&:to_i)
+      num_arr = numbers.split(/,|\n/)
+      num_array_check = num_arr.select {|num| num.include?('*') || num.include?('+')}
+      debugger
+      if(num_arr_check.any?) 
+        num_arr = num_arr.map do |num|
+          if num.include?('+')
+            num = num.split('+').map(&:to_i).sum
+          elsif num.include?('*')
+            num = num.split('*').map(&:to_i).inject(:*)
+          end
+        end
+        num_arr = num_arr.map(&:to_i)
+      else
+        num_arr = num_arr.map(&:to_i)
+      end
     end
 
     negatives = num_arr.select { |n| n < 0 }

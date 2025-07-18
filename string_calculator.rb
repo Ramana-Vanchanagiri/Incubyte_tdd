@@ -1,34 +1,26 @@
-require 'byebug'
 class StringCalculator
   def add(numbers)
     return 0 if numbers.empty?
 
+    delimiter = /,|\n/
     if numbers.start_with?("//")
       header, numbers = numbers.split("\n", 2)
-      custom_delimiter = header[2..]
+      custom_delimiter = Regexp.escape(header[2..])
+      delimiter = /#{custom_delimiter}/
+    end
 
-      parts = numbers.split(custom_delimiter)
+    tokens = numbers.split(delimiter)
 
-      if parts.size == 1 && numbers.match?(/\d+[^\d]/)
-        raise "Delimiter mismatch: please use only the specified delimiter."
-      end
-
-      num_arr = parts.map(&:to_i)
-    else
-      num_arr = numbers.split(/,|\n/)
-      num_array_check = num_arr.select {|num| num.include?('*') || num.include?('+')}
-      debugger
-      if(num_arr_check.any?) 
-        num_arr = num_arr.map do |num|
-          if num.include?('+')
-            num = num.split('+').map(&:to_i).sum
-          elsif num.include?('*')
-            num = num.split('*').map(&:to_i).inject(:*)
-          end
-        end
-        num_arr = num_arr.map(&:to_i)
+    num_arr = tokens.map do |token|
+      case token
+      when /\A-?\d+\z/
+        token.to_i
+      when /\A\d+\+\d+\z/
+        token.split('+').map(&:to_i).sum
+      when /\A\d+\*\d+\z/
+        token.split('*').map(&:to_i).inject(:*)
       else
-        num_arr = num_arr.map(&:to_i)
+        raise "Delimiter mismatch: please use only the specified delimiter."
       end
     end
 
